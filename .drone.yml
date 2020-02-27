@@ -3,6 +3,7 @@ pipeline:
     image: plugins/docker
     secrets: [ docker_username, docker_password ]
     repo: publicintegrity/django-collaborative
+    dockerfile: deploy/google-cloud/Dockerfile
     tags:
       - ${DRONE_COMMIT_SHA:0:12}
       - latest
@@ -16,11 +17,11 @@ pipeline:
     release: collaborate
     environment:
       - IMAGE_TAG=${DRONE_COMMIT_SHA:0:12}
-    values: image.repository=publicintegrity/django-collaborative,image.tag=$${IMAGE_TAG}
+    values: image.repository=publicintegrity/django-collaborative,image.tag=$${IMAGE_TAG},db.url=$${DATABASE_URL}
     prefix: 
     dry_run: true
     namespace: collaborate
-    secrets: [ api_server, kubernetes_token ]
+    secrets: [ api_server, kubernetes_token, database_url ]
     skip_tls_verify: true
     when:
       event: [push, tag]
@@ -29,6 +30,7 @@ pipeline:
     image: plugins/docker
     secrets: [ docker_username, docker_password ]
     repo: publicintegrity/django-collaborative
+    dockerfile: deploy/google-cloud/Dockerfile
     tags:
       - ${DRONE_COMMIT_SHA:0:12}
       - latest
@@ -42,10 +44,10 @@ pipeline:
     release: collaborate
     environment:
       - IMAGE_TAG=${DRONE_COMMIT_SHA:0:12}
-    values: image.repository=publicintegrity/django-collaborative,image.tag=$${IMAGE_TAG}
+    values: image.repository=publicintegrity/django-collaborative,image.tag=$${IMAGE_TAG},db.url=$${DATABASE_URL}
     prefix: 
     namespace: collaborate
-    secrets: [ api_server, kubernetes_token ]
+    secrets: [ api_server, kubernetes_token, database_url ]
     skip_tls_verify: true
     when:
       event: deployment

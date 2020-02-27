@@ -21,3 +21,8 @@ ingress:
 basedomain: apps.fivetwentyseven.com
 db:
   url: ""
+collab:
+  admin:
+    username: ""
+    email: ""
+    password: ""

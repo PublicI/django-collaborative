@@ -25,6 +25,21 @@ spec:
             secretKeyRef:
               key:  database_url
               name: {{ .Release.Name }}-auth
+        - name: "COLLAB_ADMIN_USERNAME"
+          valueFrom:
+            secretKeyRef:
+              key:  collab_admin_username
+              name: {{ .Release.Name }}-auth
+        - name: "COLLAB_ADMIN_EMAIL"
+          valueFrom:
+            secretKeyRef:
+              key:  collab_admin_email
+              name: {{ .Release.Name }}-auth
+        - name: "COLLAB_ADMIN_PASSWORD"
+          valueFrom:
+            secretKeyRef:
+              key:  collab_admin_password
+              name: {{ .Release.Name }}-auth
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         resources:

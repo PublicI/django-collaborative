@@ -37,8 +37,8 @@ RUN pip install -r requirements.txt && rm requirements.txt
 # Daemon configs
 RUN pwd
 RUN ls -alh
-COPY gunicorn-start.sh /
-COPY django_nginx.conf /etc/nginx/sites-available/
+COPY deploy/google-cloud/gunicorn-start.sh /
+COPY deploy/google-cloud/django_nginx.conf /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/django_nginx.conf /etc/nginx/sites-enabled
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 

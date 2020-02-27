@@ -19,6 +19,12 @@ spec:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: "DATABASE_URL"
+          valueFrom:
+            secretKeyRef:
+              key:  database_url
+              name: {{ .Release.Name }}-auth
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         resources:

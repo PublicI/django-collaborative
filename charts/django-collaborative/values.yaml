@@ -20,3 +20,5 @@ ingress:
   enabled: true
 basedomain: apps.fivetwentyseven.com
 
+db:
+  url: ""

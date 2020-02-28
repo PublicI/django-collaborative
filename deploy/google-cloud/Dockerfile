@@ -24,8 +24,8 @@ VOLUME ["$COLLABORATE_SRVHOME/media/", "$COLLABORATE_SRVHOME/logs/"]
 # things from an upper level directory, we pull from the repo.
 # Eventually we'll want to either add a specific commit or find a
 # way to reconcile between Google app.json and Heroku app.json.
-RUN git clone -b cloud-run \
-      https://github.com/propublica/django-collaborative \
+RUN git clone -b publici \
+      https://github.com/PublicI/django-collaborative \
       $COLLABORATE_SRVPROJ
 
 # Build our web application

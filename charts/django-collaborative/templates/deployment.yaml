@@ -20,6 +20,8 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
+        - name: "PORT"
+          value: {{ .Values.service.internalPort }}
         - name: "DATABASE_URL"
           valueFrom:
             secretKeyRef:

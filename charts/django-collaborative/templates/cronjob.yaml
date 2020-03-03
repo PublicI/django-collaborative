@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "fullname" . }}-cron
   labels:
     draft: {{ default "draft-app" .Values.draft }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
@@ -22,6 +22,8 @@ spec:
           - name: {{ .Chart.Name }}
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
             imagePullPolicy: {{ .Values.image.pullPolicy }}
+            command: ["python"]
+            args: ["manage.py","refresh_data_sources"]
             env:
             - name: "DATABASE_URL"
               valueFrom:

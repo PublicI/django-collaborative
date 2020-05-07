@@ -9,6 +9,8 @@ service:
   type: ClusterIP
   externalPort: 8080
   internalPort: 8080
+nodeSelector:
+  cloud.google.com/gke-nodepool: default-pool
 resources:
   limits:
     cpu: 100m

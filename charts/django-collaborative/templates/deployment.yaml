@@ -42,11 +42,11 @@ spec:
             secretKeyRef:
               key:  collab_admin_password
               name: {{ .Release.Name }}-auth
-      nodeSelector:
-      {{- if .Values.nodeSelector }}
-{{ toYaml .Values.nodeSelector | indent 8 }}
-      {{- end }}
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         resources:
 {{ toYaml .Values.resources | indent 12 }}
+      nodeSelector:
+      {{- if .Values.nodeSelector }}
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}

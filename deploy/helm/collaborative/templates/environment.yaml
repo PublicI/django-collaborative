@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: {{ template "fullname" . }}-secrets
+    labels:
+        app: {{ template "name" . }}
+        component: web
+        chart: {{ template "chartname" . }}
+type: Opaque
+data:
+    DATABASE_URL: {{ .Values.database.url | b64enc | quote }}
+    COLLAB_ADMIN_EMAIL: {{ .Values.collab.admin.email | b64enc | quote }}
+    COLLAB_ADMIN_USERNAME: {{ .Values.collab.admin.username | b64enc | quote }}
+    COLLAB_ADMIN_PASSWORD: {{ .Values.collab.admin.password | b64enc | quote }}

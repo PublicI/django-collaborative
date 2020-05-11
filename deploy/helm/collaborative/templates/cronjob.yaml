@@ -1,0 +1,39 @@
+{{- if .Values.cron.enabled -}}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+    name: {{ template "fullname" . }}-cron
+    labels:
+        app: {{ template "name" . }}
+        component: cronjob
+        chart: {{ template "chartname" . }}
+spec:
+    schedule: "{{ .Values.cron.schedule }}"
+    jobTemplate:
+        spec:
+            template:
+                metadata:
+                    labels:
+                        app: {{ template "name" . }}
+                        component: cronjob
+                        chart: {{ template "chartname" . }}
+                spec:
+                    restartPolicy: OnFailure
+                    containers:
+                    - name: {{ template "fullname" . }}-cron
+                      image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+                      imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+                      command: {{ .Values.cron.command }}
+                      args: {{ .Values.cron.args }}
+                      envFrom:
+                      - secretRef:
+                          name: {{ template "fullname" . }}-secrets
+                        {{- if .Values.resources }}
+                      resources:
+                        {{ toYaml .Values.resources | nindent 24 }}
+                        {{- end }}
+                        {{- if .Values.nodeSelector }}
+                      nodeSelector:
+                        {{ toYaml .Values.nodeSelector | nindent 24 }}
+                        {{- end }}
+{{- end -}}

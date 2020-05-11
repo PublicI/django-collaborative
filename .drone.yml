@@ -1,0 +1,62 @@
+pipeline:
+  build_dry_run:
+    image: plugins/docker
+    secrets: [ docker_username, docker_password ]
+    repo: publicintegrity/django-collaborative
+    dockerfile: deploy/google-cloud/Dockerfile
+    cache_from: "publicintegrity/django-collaborative:latest"
+    tags:
+      - ${DRONE_COMMIT_SHA:0:12}
+      - latest
+    dry_run: true
+    when:
+      event: [push, tag]
+
+  helm_dry_run:
+    image: publicintegrity/drone-helm
+    chart: ./deploy/helm/collaborative
+    release: collaborate
+    environment:
+      - IMAGE_TAG=${DRONE_COMMIT_SHA:0:12}
+    values: image.repository=publicintegrity/django-collaborative,image.tag=$${IMAGE_TAG},database.url=$${DATABASE_URL},collab.admin.username=$${COLLAB_ADMIN_USERNAME},collab.admin.password=$${COLLAB_ADMIN_PASSWORD},collab.admin.email=$${COLLAB_ADMIN_EMAIL}
+    prefix: 
+    dry_run: true
+    namespace: debugging-collaborate
+    secrets: [ api_server, kubernetes_token, database_url, collab_admin_username, collab_admin_password, collab_admin_email ]
+    skip_tls_verify: true
+    when:
+      event: [push, tag]
+
+  build_push:
+    image: plugins/docker
+    secrets: [ docker_username, docker_password ]
+    repo: publicintegrity/django-collaborative
+    dockerfile: deploy/google-cloud/Dockerfile
+    cache_from: "publicintegrity/django-collaborative:latest"
+    tags:
+      - ${DRONE_COMMIT_SHA:0:12}
+      - latest
+    when:
+      event: deployment
+      environment: production
+
+  helm_deploy:
+    image: publicintegrity/drone-helm
+    chart: ./deploy/helm/collaborative
+    release: collaborate
+    environment:
+      - IMAGE_TAG=${DRONE_COMMIT_SHA:0:12}
+    values: image.repository=publicintegrity/django-collaborative,image.tag=$${IMAGE_TAG},database.url=$${DATABASE_URL},collab.admin.username=$${COLLAB_ADMIN_USERNAME},collab.admin.password=$${COLLAB_ADMIN_PASSWORD},collab.admin.email=$${COLLAB_ADMIN_EMAIL}
+    prefix: 
+    namespace: debugging-collaborate
+    secrets: [ api_server, kubernetes_token, database_url, collab_admin_username, collab_admin_password, collab_admin_email ]
+    skip_tls_verify: true
+    when:
+      event: deployment
+      environment: production
+
+  slack:
+    image: plugins/slack
+    secrets: [ slack_webhook ]
+    when:
+      status: [ success, failure ]

@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "name" . }}
+    component: main
+    chart: {{ template "chartname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        component: main
+        chart: {{ template "chartname" . }}
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+        {{- if .Values.collab.command }}
+        command: {{ .Values.collab.command }}
+        {{- end }}
+        {{- if .Values.collab.args }}
+        args: {{ .Values.collab.args }}
+        {{- end }}
+        env:
+        - name: PORT
+          value: {{ .Values.service.internalPort | quote }}
+        envFrom:
+        - secretRef:
+            name: {{ template "fullname" . }}-secrets
+        ports:
+        - containerPort: {{ .Values.service.internalPort }}
+        {{- if .Values.resources }}
+        resources:
+          {{ toYaml .Values.resources | nindent 12 }}
+        {{- end }}
+        {{- if .Values.nodeSelector }}
+        nodeSelector:
+          {{ toYaml .Values.nodeSelector | nindent 12 }}
+        {{- end }}

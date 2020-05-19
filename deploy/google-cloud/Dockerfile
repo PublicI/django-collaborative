@@ -11,7 +11,6 @@ RUN apt-get update -qqy \
 ENV COLLABORATE_SRC=app
 ENV COLLABORATE_SRVHOME=/srv
 ENV COLLABORATE_SRVPROJ=$COLLABORATE_SRVHOME/$COLLABORATE_SRC
-#ENV PORT=8080
 
 # Create base application subdirectories for dynamic data
 WORKDIR $COLLABORATE_SRVHOME
@@ -24,7 +23,7 @@ VOLUME ["$COLLABORATE_SRVHOME/media/", "$COLLABORATE_SRVHOME/logs/"]
 # things from an upper level directory, we pull from the repo.
 # Eventually we'll want to either add a specific commit or find a
 # way to reconcile between Google app.json and Heroku app.json.
-RUN git clone -b publici \
+RUN rm -rf $COLLABORATE_SRVPROJ && git clone -b publici \
       https://github.com/PublicI/django-collaborative \
       $COLLABORATE_SRVPROJ
 

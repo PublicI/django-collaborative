@@ -4,6 +4,7 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     repo: publicintegrity/django-collaborative
     dockerfile: deploy/google-cloud/Dockerfile
+    context: deploy/google-cloud/
     cache_from: "publicintegrity/django-collaborative:latest"
     tags:
       - ${DRONE_COMMIT_SHA:0:12}
@@ -32,6 +33,7 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     repo: publicintegrity/django-collaborative
     dockerfile: deploy/google-cloud/Dockerfile
+    context: deploy/google-cloud/
     cache_from: "publicintegrity/django-collaborative:latest"
     tags:
       - ${DRONE_COMMIT_SHA:0:12}

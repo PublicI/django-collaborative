@@ -1,4 +1,4 @@
 apiVersion: v1
-description: A Helm chart for Kubernetes
-name: django-collaborative
+description: Helm chart to deploy ProPublica's Collaborate application
+name: collaborative
 version: v0.1.0

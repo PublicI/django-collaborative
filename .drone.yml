@@ -15,7 +15,7 @@ pipeline:
 
   helm_dry_run:
     image: publicintegrity/drone-helm
-    chart: ./charts/django-collaborative
+    chart: ./deploy/helm/django-collaborative
     release: collaborate
     environment:
       - IMAGE_TAG=${DRONE_COMMIT_SHA:0:12}
@@ -44,7 +44,7 @@ pipeline:
 
   helm_deploy:
     image: publicintegrity/drone-helm
-    chart: ./charts/django-collaborative
+    chart: ./deploy/helm/django-collaborative
     release: collaborate
     environment:
       - IMAGE_TAG=${DRONE_COMMIT_SHA:0:12}
